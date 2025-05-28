@@ -11,6 +11,12 @@ public sealed class ReservationManager
     // Concurrent Collections
     private readonly ConcurrentDictionary<Guid, Reservation> _reservations
         = new ConcurrentDictionary<Guid, Reservation>();
+    
+    // Voor API
+    public List<Reservation> GetAll()
+    {
+        return _reservations.Values.ToList();
+    }
 
     public static ReservationManager Instance => instance.Value;
 
@@ -20,4 +26,6 @@ public sealed class ReservationManager
 
     public void AddReservation(Reservation reservation) => _reservations.TryAdd(reservation.Id, reservation);
     public Reservation GetReservation(Guid id) => _reservations[id];
+    
+    
 }
