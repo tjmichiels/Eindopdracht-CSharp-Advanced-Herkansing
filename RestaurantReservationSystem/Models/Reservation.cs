@@ -15,10 +15,10 @@ public class Reservation
 
     public override String ToString()
     {
-        var tableInfo = ReservedTable != null 
-            ? $"Tafel {ReservedTable.Id} in '{ReservedTable.Room?.Name}'" 
+        var tableInfo = ReservedTable != null
+            ? $"Tafel {ReservedTable.Id} in '{ReservedTable.Room?.Name}'"
             : "Geen tafel toegewezen";
-        
+
         var details = String.IsNullOrEmpty(Details) ? "" : $"\nDetails: {Details}";
 
         return $"Reservering van {GuestName} op {DateTime:g} voor {NumberOfGuests} personen. " +

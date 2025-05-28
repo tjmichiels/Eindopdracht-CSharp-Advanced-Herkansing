@@ -31,4 +31,17 @@ public class TableManager
     {
         return _tables.TryGetValue(id, out var table) ? table : null;
     }
+
+    public void DisplayStructure()
+    {
+        var grouped = _tables.Values.GroupBy(t => t.Room?.Name ?? "Onbekende ruimte");
+        foreach (var group in grouped)
+        {
+            Console.WriteLine($"Ruimte: {group.Key}");
+            foreach (var table in group)
+            {
+                Console.WriteLine($"  - Tafel {table.Id} ({table.Seats} stoelen, Beschikbaar: {table.IsAvailable})");
+            }
+        }
+    }
 }

@@ -7,6 +7,7 @@ using RestaurantReservationSystem.Strategies;
 using RestaurantReservationSystem.Managers;
 
 namespace RestaurantReservationSystem.Controllers;
+
 [ApiController]
 [Route("api/[controller]")]
 public class ReservationController : ControllerBase
@@ -25,7 +26,7 @@ public class ReservationController : ControllerBase
             .SetGuestName(dto.GuestName)
             .SetDateTime(dto.DateTime)
             .SetNumberOfGuests(dto.NumberOfGuests);
-        
+
         if (!string.IsNullOrWhiteSpace(dto.SpecialRequest))
             builder.SetDetails(dto.SpecialRequest);
 

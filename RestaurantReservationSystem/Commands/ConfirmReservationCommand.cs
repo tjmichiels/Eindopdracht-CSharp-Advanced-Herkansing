@@ -25,8 +25,8 @@ public class ConfirmReservationCommand : IReservationCommand
     public void Execute()
     {
         _reservation.ReservationState = new ConfirmedReservationState();
-        
-        
+
+
         // Concurrency: klantnotificatie + SignalR via thread pool
         ThreadPoolExecutor.QueueTask(async () =>
         {
