@@ -1,5 +1,7 @@
-﻿using RestaurantReservationSystem.Concurrency;
+﻿using Microsoft.AspNetCore.SignalR;
+using RestaurantReservationSystem.Concurrency;
 using RestaurantReservationSystem.Enums;
+using RestaurantReservationSystem.Hubs;
 using RestaurantReservationSystem.Models;
 using RestaurantReservationSystem.Observers;
 using RestaurantReservationSystem.Services;
@@ -11,6 +13,7 @@ public class ConfirmReservationCommand : IReservationCommand
 {
     private readonly Reservation _reservation;
     private readonly NotificationService _notificationService;
+    private readonly IHubContext<ReservationHub> _hubContext;
 
     public ConfirmReservationCommand(Reservation reservation)
     {
@@ -23,7 +26,12 @@ public class ConfirmReservationCommand : IReservationCommand
     {
         _reservation.ReservationState = new ConfirmedReservationState();
         
-        // Notificeer de klant
-        ThreadPoolExecutor.QueueTask(async () => await _notificationService.NotifyAllAsync(_reservation)); // Thread Pool Pattern
+        
+        // Concurrency: klantnotificatie + SignalR via thread pool
+        ThreadPoolExecutor.QueueTask(async () =>
+        {
+            await _notificationService.NotifyAllAsync(_reservation);
+            await _hubContext.Clients.All.SendAsync("ReceiveReservationUpdate", _reservation.ToString());
+        });
     }
 }
